@@ -146,9 +146,6 @@ Toolkit.run(
       }
     }
 
-    tools.log.debug(filteredEvents);
-    tools.log.debug(content);
-
     const readmeContent = fs.readFileSync("./README.md", "utf-8").split("\n");
 
     // Find the index corresponding to <!--START_SECTION:activity--> comment
@@ -207,9 +204,6 @@ Toolkit.run(
     const newContent = content
       .map((line, idx) => `${idx + 1}. ${line}`)
       .join("\n");
-    
-    tools.log.debug("OLD CONTENT", oldContent);
-    tools.log.debug("NEW CONTENT", newContent);
 
     if (oldContent.trim() === newContent.trim())
       tools.exit.success("No changes detected");
@@ -218,6 +212,7 @@ Toolkit.run(
 
     // Recent GitHub Activity content between the comments
     const readmeActivitySection = readmeContent.slice(startIdx, endIdx);
+    tools.log.debug(readmeActivitySection, readmeActivitySection.length);
     if (!readmeActivitySection.length) {
       content.some((line, idx) => {
         // User doesn't have 5 public events
@@ -243,6 +238,8 @@ Toolkit.run(
       });
       tools.log.success("Updated README with the recent activity");
     }
+
+    tools.log.debug("NEW README CONTENT", readmeContent.join("\n"));
 
     // Update README
     fs.writeFileSync("./README.md", readmeContent.join("\n"));
