@@ -104,7 +104,8 @@ const serializers = {
     const line = item.payload.pull_request.merged
       ? "🎉 Merged"
       : `${emoji} ${capitalize(item.payload.action)}`;
-    return `${line} PR ${toUrlFormat(item)} in ${toUrlFormat(item.repo.name)}`;  },
+    return `${line} PR ${toUrlFormat(item)} in ${toUrlFormat(item.repo.name)}`;
+  },
   PushEvent: (item) => {
     return `🚀 Pushed ${item.payload.size} commit${
       item.payload.size == 1 ? "" : "s"
@@ -124,8 +125,9 @@ Toolkit.run(
       `Activity for ${GH_USERNAME}, ${events.data.length} events found.`
     );
 
-    const filteredEvents = events.data
-      .filter((event) => Object.keys(serializers).includes(event.type));
+    const filteredEvents = events.data.filter((event) =>
+      Object.keys(serializers).includes(event.type)
+    );
 
     let content = [];
     let lastEventWasPushEvent = false;
@@ -217,7 +219,8 @@ Toolkit.run(
       tools.log.success("Wrote to README");
     } else {
       // It is likely that a newline is inserted after the <!--START_SECTION:activity--> comment (code formatter)
-      let count = 0;
+      let count = 0,
+        lastIdx = -1;
 
       readmeActivitySection.some((line, idx) => {
         // User doesn't have 5 public events
@@ -225,10 +228,21 @@ Toolkit.run(
           return true;
         }
         if (line !== "") {
+          lastIdx = idx;
           readmeContent[startIdx + idx] = `${count + 1}. ${content[count]}`;
           count++;
         }
       });
+
+      tools.log.debug(readmeContent);
+
+      for (let i = count; i < content.length; i++) {
+        let insertIdx = startIdx + lastIdx + (i - count);
+        readmeContent.splice(insertIdx, 0, `${count + 1}. ${content[count]}`);
+      }
+
+      tools.log.debug(readmeContent);
+
       tools.log.success("Updated README with the recent activity");
     }
 
