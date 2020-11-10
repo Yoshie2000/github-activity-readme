@@ -238,7 +238,7 @@ Toolkit.run(
 
       for (let i = count; i < content.length; i++) {
         let insertIdx = startIdx + lastIdx + (i - count);
-        readmeContent.splice(insertIdx, 0, `${count + 1}. ${content[count]}`);
+        readmeContent.splice(insertIdx, 0, `${i + 1}. ${content[i]}`);
       }
 
       tools.log.debug(readmeContent);
