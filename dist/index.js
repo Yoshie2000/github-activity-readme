@@ -134,16 +134,23 @@ Toolkit.run(
       // We only have five lines to work with
       .slice(0, MAX_LINES);
 
-    filteredEvents.push(
-      events.data
-        .filter((event) => Object.keys(backupSerializers).includes(event.type))
-        .slice(0, MAX_LINES - filteredEvents.length)
-    );
+    const backupEvents = events.data
+      // Filter out any boring activity
+      .filter((event) => Object.keys(backupSerializers).includes(event.type))
+      // We only have five lines to work with
+      .slice(0, MAX_LINES);
 
     let content = [];
     for (let event of filteredEvents) {
       let value = serializers[event.type](event);
       if (!content.includes(value)) content.push(value);
+    }
+
+    for (let event of backupEvents) {
+      if (content.length < MAX_LINES) {
+        let value = serializers[event.type](event);
+        if (!content.includes(value)) content.push(value);
+      }
     }
 
     tools.log.debug(filteredEvents);
