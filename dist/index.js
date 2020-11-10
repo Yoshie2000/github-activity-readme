@@ -107,7 +107,9 @@ const serializers = {
     return `${line} PR ${toUrlFormat(item)} in ${toUrlFormat(item.repo.name)}`;
   },
   PushEvent: (item) => {
-    return `🚀 Pushed ${item.payload.size} commit${item.payload.size == 1 ? "" : "s"} to ${toUrlFormat(item.repo.name)}`;
+    return `🚀 Pushed ${item.payload.size} commit${
+      item.payload.size == 1 ? "" : "s"
+    } to ${toUrlFormat(item.repo.name)}`;
   },
 };
 
@@ -121,6 +123,12 @@ Toolkit.run(
     });
     tools.log.debug(
       `Activity for ${GH_USERNAME}, ${events.data.length} events found.`
+    );
+
+    tools.log.debug(
+      events.data.filter((event) =>
+        Object.keys(serializers).includes(event.type)
+      )
     );
 
     const content = events.data
@@ -151,7 +159,7 @@ Toolkit.run(
     );
 
     if (!content.length) {
-      tools.exit.failure("No PullRequest/Issue/IssueComment events found");
+      tools.exit.failure("No PullRequest/Issue/IssueComment/Push events found");
     }
 
     if (content.length < 5) {
