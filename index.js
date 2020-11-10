@@ -99,6 +99,9 @@ const serializers = {
       : `${emoji} ${capitalize(item.payload.action)}`;
     return `${line} PR ${toUrlFormat(item)} in ${toUrlFormat(item.repo.name)}`;
   },
+  PushEvent: (item) => {
+    return `Pushed ${size} commits to ${toUrlFormat(item.repo.name)}`;
+  },
 };
 
 Toolkit.run(
@@ -110,9 +113,8 @@ Toolkit.run(
       per_page: 100,
     });
     tools.log.debug(
-      `Activityyyyy for ${GH_USERNAME}, ${events.data.length} events found.`
+      `Activity for ${GH_USERNAME}, ${events.data.length} events found.`
     );
-    tools.log.debug(events.data);
 
     const content = events.data
       // Filter out any boring activity
