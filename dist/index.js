@@ -104,8 +104,7 @@ const serializers = {
     const line = item.payload.pull_request.merged
       ? "🎉 Merged"
       : `${emoji} ${capitalize(item.payload.action)}`;
-    return `${line} PR ${toUrlFormat(item)} in ${toUrlFormat(item.repo.name)}`;
-  },
+    return `${line} PR ${toUrlFormat(item)} in ${toUrlFormat(item.repo.name)}`;  },
   PushEvent: (item) => {
     return `🚀 Pushed ${item.payload.size} commit${
       item.payload.size == 1 ? "" : "s"
@@ -219,7 +218,7 @@ Toolkit.run(
       // It is likely that a newline is inserted after the <!--START_SECTION:activity--> comment (code formatter)
       let count = 0;
 
-      content.some((line, idx) => {
+      readmeActivitySection.some((line, idx) => {
         // User doesn't have 5 public events
         if (!content[count]) {
           return true;

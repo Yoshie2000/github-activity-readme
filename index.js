@@ -211,7 +211,7 @@ Toolkit.run(
       // It is likely that a newline is inserted after the <!--START_SECTION:activity--> comment (code formatter)
       let count = 0;
 
-      content.some((line, idx) => {
+      readmeActivitySection.some((line, idx) => {
         // User doesn't have 5 public events
         if (!content[count]) {
           return true;
