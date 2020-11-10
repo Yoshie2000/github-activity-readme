@@ -97,11 +97,7 @@ const serializers = {
     const line = item.payload.pull_request.merged
       ? "🎉 Merged"
       : `${emoji} ${capitalize(item.payload.action)}`;
-    return `${line} PR ${toUrlFormat(item)} in ${toUrlFormat(item.repo.name)}`;
-  },
-};
-
-const backupSerializers = {
+    return `${line} PR ${toUrlFormat(item)} in ${toUrlFormat(item.repo.name)}`;  },
   PushEvent: (item) => {
     return `🚀 Pushed ${item.payload.size} commit${
       item.payload.size == 1 ? "" : "s"
@@ -122,28 +118,18 @@ Toolkit.run(
     );
 
     const filteredEvents = events.data
-      // Filter out any boring activity
       .filter((event) => Object.keys(serializers).includes(event.type))
-      // We only have five lines to work with
-      .slice(0, MAX_LINES);
-
-    const backupEvents = events.data
-      // Filter out any boring activity
-      .filter((event) => Object.keys(backupSerializers).includes(event.type))
-      // We only have five lines to work with
       .slice(0, MAX_LINES);
 
     let content = [];
+    let lastEventWasPushEvent = false;
     for (let event of filteredEvents) {
+      if (lastEventWasPushEvent && event.type == "PushEvent") continue;
+
       let value = serializers[event.type](event);
       if (!content.includes(value)) content.push(value);
-    }
 
-    for (let event of backupEvents) {
-      if (content.length < MAX_LINES) {
-        let value = serializers[event.type](event);
-        if (!content.includes(value)) content.push(value);
-      }
+      lastEventWasPushEvent = event.type == "PushEvent";
     }
 
     const readmeContent = fs.readFileSync("./README.md", "utf-8").split("\n");
@@ -212,7 +198,6 @@ Toolkit.run(
 
     // Recent GitHub Activity content between the comments
     const readmeActivitySection = readmeContent.slice(startIdx, endIdx);
-    tools.log.debug(readmeActivitySection, readmeActivitySection.length);
     if (!readmeActivitySection.length) {
       content.some((line, idx) => {
         // User doesn't have 5 public events
@@ -238,8 +223,6 @@ Toolkit.run(
       });
       tools.log.success("Updated README with the recent activity");
     }
-
-    tools.log.debug("NEW README CONTENT", readmeContent.join("\n"));
 
     // Update README
     fs.writeFileSync("./README.md", readmeContent.join("\n"));
