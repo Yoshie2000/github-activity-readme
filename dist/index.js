@@ -107,7 +107,7 @@ const serializers = {
     return `${line} PR ${toUrlFormat(item)} in ${toUrlFormat(item.repo.name)}`;
   },
   PushEvent: (item) => {
-    return `Pushed ${size} commits to ${toUrlFormat(item.repo.name)}`;
+    return `Pushed ${item.payload.size} commits to ${toUrlFormat(item.repo.name)}`;
   },
 };
 
