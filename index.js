@@ -4,7 +4,7 @@ const path = require("path");
 const { spawn } = require("child_process");
 const { Toolkit } = require("actions-toolkit");
 
-const MAX_LINES = 100;
+const MAX_LINES = 5;
 
 // Get config
 const GH_USERNAME = core.getInput("GH_USERNAME");
@@ -118,12 +118,6 @@ Toolkit.run(
       `Activity for ${GH_USERNAME}, ${events.data.length} events found.`
     );
 
-    tools.log.debug(
-      events.data.filter((event) =>
-        Object.keys(serializers).includes(event.type)
-      )
-    );
-
     const content = events.data
       // Filter out any boring activity
       .filter((event) => Object.keys(serializers).includes(event.type))
@@ -131,6 +125,8 @@ Toolkit.run(
       .slice(0, MAX_LINES)
       // Call the serializer to construct a string
       .map((item) => serializers[item.type](item));
+    
+    tools.log.debug(content);
 
     const readmeContent = fs.readFileSync("./README.md", "utf-8").split("\n");
 
