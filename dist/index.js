@@ -125,12 +125,13 @@ Toolkit.run(
     );
 
     const filteredEvents = events.data
-      .filter((event) => Object.keys(serializers).includes(event.type))
-      .slice(0, MAX_LINES);
+      .filter((event) => Object.keys(serializers).includes(event.type));
 
     let content = [];
     let lastEventWasPushEvent = false;
     for (let event of filteredEvents) {
+      if (content.length >= MAX_LINES) break;
+
       if (lastEventWasPushEvent && event.type == "PushEvent") continue;
 
       let value = serializers[event.type](event);
