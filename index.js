@@ -118,14 +118,18 @@ Toolkit.run(
       `Activity for ${GH_USERNAME}, ${events.data.length} events found.`
     );
 
-    const content = events.data
+    const filteredEvents = events.data
       // Filter out any boring activity
       .filter((event) => Object.keys(serializers).includes(event.type))
       // We only have five lines to work with
-      .slice(0, MAX_LINES)
-      // Call the serializer to construct a string
-      .map((item) => serializers[item.type](item));
+      .slice(0, MAX_LINES);
     
+    let content = [];
+    for (let event of filteredEvents) {
+      content.push(serializers[event.type](event));
+    }
+    
+    tools.log.debug(filteredEvents);
     tools.log.debug(content);
 
     const readmeContent = fs.readFileSync("./README.md", "utf-8").split("\n");
