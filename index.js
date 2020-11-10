@@ -116,7 +116,7 @@ Toolkit.run(
     const content = events.data
       // Filter out any boring activity
       .filter((event) => {
-        tools.log.info(event, event.type);
+        tools.log.debug(event, event.type);
         return serializers.hasOwnProperty(event.type);
       })
       // We only have five lines to work with
