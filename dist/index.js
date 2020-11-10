@@ -11,7 +11,7 @@ const path = __webpack_require__(5622);
 const { spawn } = __webpack_require__(3129);
 const { Toolkit } = __webpack_require__(5966);
 
-const MAX_LINES = 5;
+const MAX_LINES = 100;
 
 // Get config
 const GH_USERNAME = core.getInput("GH_USERNAME");
@@ -125,7 +125,7 @@ Toolkit.run(
 
     const content = events.data
       // Filter out any boring activity
-      .filter((event) => serializers.hasOwnProperty(event.type))
+      .filter((event) => Object.keys(serializers).includes(event.type))
       // We only have five lines to work with
       .slice(0, MAX_LINES)
       // Call the serializer to construct a string
