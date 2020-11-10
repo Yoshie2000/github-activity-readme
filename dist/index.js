@@ -106,6 +106,9 @@ const serializers = {
       : `${emoji} ${capitalize(item.payload.action)}`;
     return `${line} PR ${toUrlFormat(item)} in ${toUrlFormat(item.repo.name)}`;
   },
+};
+
+const backupSerializers = {
   PushEvent: (item) => {
     return `🚀 Pushed ${item.payload.size} commit${
       item.payload.size == 1 ? "" : "s"
@@ -130,12 +133,19 @@ Toolkit.run(
       .filter((event) => Object.keys(serializers).includes(event.type))
       // We only have five lines to work with
       .slice(0, MAX_LINES);
-    
+
+    filteredEvents.push(
+      events.data
+        .filter((event) => Object.keys(backupSerializers).includes(event.type))
+        .slice(0, MAX_LINES - filteredEvents.length)
+    );
+
     let content = [];
     for (let event of filteredEvents) {
-      content.push(serializers[event.type](event));
+      let value = serializers[event.type](event);
+      if (!content.includes(value)) content.push(value);
     }
-    
+
     tools.log.debug(filteredEvents);
     tools.log.debug(content);
 
