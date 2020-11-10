@@ -110,7 +110,7 @@ Toolkit.run(
       per_page: 100,
     });
     tools.log.debug(
-      `Activity for ${GH_USERNAME}, ${events.data.length} events found.`
+      `Activityyyyy for ${GH_USERNAME}, ${events.data.length} events found.`
     );
     tools.log.debug(events.data);
 
