@@ -214,6 +214,9 @@ Toolkit.run(
     const newContent = content
       .map((line, idx) => `${idx + 1}. ${line}`)
       .join("\n");
+    
+    tools.log.debug("OLD CONTENT", oldContent);
+    tools.log.debug("NEW CONTENT", newContent);
 
     if (oldContent.trim() === newContent.trim())
       tools.exit.success("No changes detected");
