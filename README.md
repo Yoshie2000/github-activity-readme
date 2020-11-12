@@ -70,5 +70,3 @@ jobs:
         with:
           COMMIT_MSG: 'Specify a custom commit message'
 ```
-
-_Inspired by [JasonEtco/activity-box](https://github.com/JasonEtco/activity-box)_
