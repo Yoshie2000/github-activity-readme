@@ -134,7 +134,16 @@ Toolkit.run(
     for (let event of filteredEvents) {
       if (content.length >= MAX_LINES) break;
 
-      if (lastEventWasPushEvent && event.type == "PushEvent") continue;
+      if (lastEventWasPushEvent && event.type == "PushEvent") {
+        let lastPushEvent = content[content.length - 1].split("s");
+        let lastPushEventCommitCount = Number(lastPushEvent[2]);
+
+        let currentCommitCount = event.payload.size;
+
+        lastPushEvent[2] = lastPushEventCommitCount + currentCommitCount;
+        content[content.length - 1] = lastPushEvent.join(" ");
+        continue;
+      }
 
       let value = serializers[event.type](event);
       if (!content.includes(value)) content.push(value);
