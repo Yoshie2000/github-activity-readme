@@ -137,11 +137,11 @@ Toolkit.run(
       if (lastEventWasPushEvent && event.type == "PushEvent") {
         let lastPushEvent = content[content.length - 1].split(" ");
         let lastPushEventCommitCount = Number(lastPushEvent[2]);
-        tools.log.debug(lastPushEvent, lastPushEventCommitCount);
 
         let currentCommitCount = event.payload.size;
 
         lastPushEvent[2] = lastPushEventCommitCount + currentCommitCount;
+        lastPushEvent[3] = "commits"; // It's always more than 1 commit now, so put the s there
         content[content.length - 1] = lastPushEvent.join(" ");
         continue;
       }
