@@ -8,7 +8,7 @@ Updates `README.md` with the recent GitHub activity of a user.
 
 ## Instructions
 
-- Add the comment `<!--START_SECTION:activity-->` (entry point) within `README.md`. You can find an example [here](https://github.com/jamesgeorge007/jamesgeorge007/blob/master/README.md).
+- Add the comment `<!--START_SECTION:activity-->` (entry point) within `README.md`. You can find an example [here](https://github.com/Yoshie2000/Yoshie2000/blob/master/README.md).
 
 - It's the time to create a workflow file.
 
@@ -29,7 +29,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: jamesgeorge007/github-activity-readme@master
+      - uses: Yoshie2000/github-activity-readme@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -41,6 +41,7 @@ Please note that only those public events that belong to the following list show
 - `IssueEvent`
 - `IssueCommentEvent`
 - `PullRequestEvent`
+- `PushEvent`
 
 You can find an example [here](https://github.com/jamesgeorge007/jamesgeorge007/blob/master/.github/workflows/update-readme.yml).
 
@@ -63,11 +64,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: jamesgeorge007/github-activity-readme@master
+      - uses: Yoshie2000/github-activity-readme@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           COMMIT_MSG: 'Specify a custom commit message'
 ```
-
-_Inspired by [JasonEtco/activity-box](https://github.com/JasonEtco/activity-box)_
