@@ -135,8 +135,9 @@ Toolkit.run(
       if (content.length >= MAX_LINES) break;
 
       if (lastEventWasPushEvent && event.type == "PushEvent") {
-        let lastPushEvent = content[content.length - 1].split("s");
+        let lastPushEvent = content[content.length - 1].split(" ");
         let lastPushEventCommitCount = Number(lastPushEvent[2]);
+        tools.log.debug(lastPushEvent, lastPushEventCommitCount);
 
         let currentCommitCount = event.payload.size;
 
@@ -243,14 +244,10 @@ Toolkit.run(
         }
       });
 
-      tools.log.debug(readmeContent);
-
       for (let i = count; i < content.length; i++) {
         let insertIdx = startIdx + lastIdx + (i - count);
         readmeContent.splice(insertIdx, 0, `${i + 1}. ${content[i]}`);
       }
-
-      tools.log.debug(readmeContent);
 
       tools.log.success("Updated README with the recent activity");
     }
